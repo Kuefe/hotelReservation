@@ -5,29 +5,25 @@ import model.Customer;
 import java.util.Collection;
 
 public class CustomerService {
-    // Static variable reference of single_instance
-    // of type Singleton
-    private static CustomerService customerService = null;
+    private static CustomerService INSTANCE;
 
     public CustomerService() {
     }
 
-    // Static method
-    // Static method to create instance of Singleton class
-    public static CustomerService getInstance()
-    {
-        if (customerService == null)
-            customerService = new CustomerService();
-
-        return customerService;
+    public static CustomerService getInstance() {
+        if (INSTANCE == null){
+            INSTANCE = new CustomerService();
+        }
+        return INSTANCE;
     }
 
     public void addCustomer(String email, String firstName, String lastName) {
 
     }
 
-    public void getCustomer(String customerEmail) {
+    public Customer getCustomer(String customerEmail) {
 
+        return null;
     }
 
     public Collection<Customer> getAllCustomers(){

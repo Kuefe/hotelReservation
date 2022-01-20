@@ -8,21 +8,17 @@ import java.util.Collection;
 import java.util.Date;
 
 public class ReservationService {
-    // Static variable reference of single_instance
-    // of type Singleton
-    private static ReservationService reservationService = null;
+    private static ReservationService INSTANCE;
 
     public ReservationService() {
     }
 
-    // Static method
-    // Static method to create instance of Singleton class
     public static ReservationService getInstance()
     {
-        if (reservationService == null)
-            reservationService = new ReservationService();
+        if (INSTANCE == null)
+            INSTANCE = new ReservationService();
 
-        return reservationService;
+        return INSTANCE;
     }
 
     public void addRoom(IRoom room){
@@ -52,6 +48,6 @@ public class ReservationService {
 
     }
 
-    // Create Collections to store and retrieve a Reservation1
+    // Create Collections to store and retrieve a Reservation
 
 }

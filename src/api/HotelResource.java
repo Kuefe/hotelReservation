@@ -3,35 +3,39 @@ package api;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
+import service.CustomerService;
+import service.ReservationService;
 
 import java.util.Collection;
 import java.util.Date;
 
 public class HotelResource {
-    // provide a static reference
-    // implementation in the services
+    private static final CustomerService customerService =
+            CustomerService.getInstance();
+    private static final ReservationService reservationService =
+            ReservationService.getInstance();
 
-    public Customer getCustomer(String email) {
-        return null;
+    public static Customer getCustomer(String email) {
+        return customerService.getCustomer(email);
     }
 
-    public void createACustomer(String email, String firstName, String lastName){
-
+    public static void createACustomer(String email, String firstName, String lastName) {
+        customerService.addCustomer(email, firstName, lastName);
     }
 
-    public IRoom getRoom(String roomNumber){
-        return null;
+    public static IRoom getRoom(String roomNumber) {
+        return reservationService.getARoom(roomNumber);
     }
 
-    public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
-        return null;
+    public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
+        return reservationService.reserveARoom(getCustomer(customerEmail), room, checkInDate, checkOutDate);
     }
 
-    public Collection<Reservation> getCustomersReservations(String customerEmail){
-        return null;
+    public static Collection<Reservation> getCustomersReservations(String customerEmail) {
+        return reservationService.getCustomerReservations(getCustomer(customerEmail));
     }
 
-    public Collection<IRoom> findARoom(Date checkInDate, Date checkOutDate){
-        return null;
+    public static Collection<IRoom> findARoom(Date checkInDate, Date checkOutDate) {
+        return reservationService.findRooms(checkInDate,checkOutDate);
     }
 }
