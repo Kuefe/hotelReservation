@@ -1,5 +1,3 @@
-import model.RoomType;
-
 import java.util.Scanner;
 
 public class AdminMenu {

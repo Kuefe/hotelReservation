@@ -6,7 +6,7 @@ public class MainMenu {
         Scanner scanner = new Scanner(System.in);
         while (keepRunning) {
             try {
-                System.out.println("Welcome to the Hotel Reservation Application");
+                System.out.println("Welcome to the Hotel Reservation1 Application");
                 System.out.println("");
                 System.out.println("____________________________________________________");
                 System.out.println("1. Find and reserve a room");
