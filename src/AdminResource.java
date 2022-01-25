@@ -6,7 +6,7 @@ import service.CustomerService;
 import service.ReservationService;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 
 public class AdminResource {
     private static final CustomerService customerService =
@@ -18,21 +18,18 @@ public class AdminResource {
         return customerService.getCustomer(email);
     }
 
-    public static void addRoom(List<IRoom> rooms) {
-        for (IRoom room : rooms) {
+    public static void addRoom(HashMap<String , IRoom> rooms) {
+        for (IRoom room : rooms.values()) {
             reservationService.addRoom(room);
         }
     }
 
-    public Collection<IRoom> getAllRooms() {
-        return null;
+    public static Collection<IRoom> getAllRooms() {
+        return reservationService.getAllRooms();
     }
 
-    public Collection<Customer> getAllCustomers() {
-        return null;
+    public static Collection<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 
-    public void displayAllReservations() {
-        reservationService.printAllReservation();
-    }
 }

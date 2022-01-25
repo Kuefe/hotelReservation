@@ -23,10 +23,6 @@ public class HotelResource {
         customerService.addCustomer(email, firstName, lastName);
     }
 
-    public static IRoom getRoom(String roomNumber) {
-        return reservationService.getARoom(roomNumber);
-    }
-
     public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
         return reservationService.reserveARoom(getCustomer(customerEmail), room, checkInDate, checkOutDate);
     }
