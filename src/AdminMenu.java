@@ -1,6 +1,10 @@
-import java.util.Scanner;
+import model.*;
+
+import java.util.*;
 
 public class AdminMenu {
+    public static HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
+
     public static void runMenu() {
         boolean keepRunning = true;
         Scanner scanner = new Scanner(System.in);
@@ -17,18 +21,25 @@ public class AdminMenu {
                 System.out.println("____________________________________________________");
                 System.out.println("Please select a number for the menu option: ");
                 int selection = Integer.parseInt(scanner.nextLine());
-                if (selection == 1) {
-                    keepRunning = false;
-                } else if (selection == 2) {
-                    keepRunning = false;
-                } else if (selection == 3) {
-                    keepRunning = false;
-                } else if (selection == 4) {
-                    addRoomMenu();
-                } else if (selection == 5) {
-                    keepRunning = false;
-                } else {
-                    System.out.println("Please enter a number between 1 and 5");
+                switch (selection) {
+                    case 1:
+                        seeAllCustomers();
+                        break;
+                    case 2:
+                        seeAllRooms();
+                        break;
+                    case 3:
+                        AdminResource.displayAllReservations();
+                        break;
+                    case 4:
+                        addARoom();
+                        break;
+                    case 5:
+                        keepRunning = false;
+                        break;
+                    default:
+                        System.out.println("Please enter a number between 1 and 5");
+                        break;
                 }
             } catch (Exception ex) {
                 System.out.println("Error - Invalid Input\n");
@@ -36,28 +47,31 @@ public class AdminMenu {
         }
     }
 
-    private static void addRoomMenu() {
+    private static void addARoom() {
         String screenText = "";
         String addRoom = "y";
+        int roomTypeSelection = 0;
+
         Scanner scanner = new Scanner(System.in);
+
         while (addRoom.equals("y")) {
+            Room newRoom = new Room("", 0.0, RoomType.SINGLE);
             try {
                 // Input room number
                 System.out.println("Enter a room number");
-                String roomNumber = scanner.nextLine();
+                newRoom.setRoomNumber(scanner.nextLine());
 
-                // Input price per night
-                System.out.println("Enter price per night");
-                double price = Double.parseDouble(scanner.nextLine());
+                // Input roomPrice per night
+                System.out.println("Enter roomPrice per night");
+                newRoom.setRoomPrice(Double.parseDouble(scanner.nextLine()));
 
                 // Input room type
                 screenText = "Enter room type: 1 for single bed, 2 for double bed";
-                int roomType;
                 do {
                     System.out.println(screenText);
                     screenText = "Please enter 1(single bed) or 2(double bed)";
-                    roomType = Integer.parseInt(scanner.nextLine());
-                } while (roomType != 1 && roomType != 2);
+                    roomTypeSelection = Integer.parseInt(scanner.nextLine());
+                } while (roomTypeSelection != 1 && roomTypeSelection != 2);
 
                 // Input add another room?
                 screenText = "Would you like to add another room y/n";
@@ -70,7 +84,25 @@ public class AdminMenu {
             } catch (Exception ex) {
                 System.out.println("Error - Invalid Input\n");
             }
+            if (roomTypeSelection == 2) {
+                newRoom.setRoomType(RoomType.DOUBLE);
+            }
+            rooms.put(newRoom.getRoomNumber(), newRoom);
         }
+        AdminResource.addRoom(rooms);
+    }
 
+    private static void seeAllRooms() {
+        Collection<IRoom> rooms = AdminResource.getAllRooms();
+        for (IRoom room : rooms) {
+            System.out.println(room);
+        }
+    }
+
+    private static void seeAllCustomers() {
+        Collection<Customer> customers = AdminResource.getAllCustomers();
+        for (Customer customer : customers) {
+            System.out.println(customer);
+        }
     }
 }

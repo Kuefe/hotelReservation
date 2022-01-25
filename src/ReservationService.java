@@ -1,9 +1,6 @@
-package service;
-
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
-import model.Room;
 
 import java.util.*;
 
@@ -13,14 +10,14 @@ public class ReservationService {
 
     private static ReservationService INSTANCE;
 
-    public static ReservationService getInstance() {
+    static ReservationService getInstance() {
         if (INSTANCE == null)
             INSTANCE = new ReservationService();
 
         return INSTANCE;
     }
 
-    public  void addRoom(IRoom room) {
+    void addRoom(IRoom room) {
         rooms.put(room.getRoomNumber(), room);
     }
 
@@ -28,14 +25,14 @@ public class ReservationService {
         return rooms.get(roomId);
     }
 
-    public Collection<IRoom> getAllRooms() {
+    Collection<IRoom> getAllRooms() {
         return rooms.values();
     }
 
-    public Reservation reserveARoom(Customer customer,
-                                    IRoom room,
-                                    Date checkInDate,
-                                    Date checkOutDate) {
+    Reservation reserveARoom(Customer customer,
+                             IRoom room,
+                             Date checkInDate,
+                             Date checkOutDate) {
         Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
         String customerEmail = customer.getEmail();
         reservations.putIfAbsent(customerEmail, new ArrayList<>());
@@ -43,10 +40,10 @@ public class ReservationService {
         return reservation;
     }
 
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+    Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         List<IRoom> freeRooms = new ArrayList<IRoom>();
 
-        for (IRoom room: rooms.values()) {
+        for (IRoom room : rooms.values()) {
             freeRooms.add(room);
         }
 
@@ -63,7 +60,7 @@ public class ReservationService {
         return freeRooms;
     }
 
-     public Collection<Reservation> getCustomerReservations(Customer customer) {
+    Collection<Reservation> getCustomerReservations(Customer customer) {
         return reservations.get(customer.getEmail());
     }
 
