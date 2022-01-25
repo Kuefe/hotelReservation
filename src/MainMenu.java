@@ -48,45 +48,20 @@ public class MainMenu {
         scanner.close();
     }
 
-    private static void createAccount() {
-        Scanner scanner = new Scanner(System.in);
-
-        try {
-            // Input email-address
-            System.out.println("Enter Email format: name@domain.com");
-            String email = scanner.nextLine();
-
-            // Input first name
-            System.out.println("First Name");
-            String firstName = scanner.nextLine();
-
-            // Input last name
-            System.out.println("Last Name");
-            String lastName = scanner.nextLine();
-
-            HotelResource.createACustomer(email, firstName, lastName);
-        } catch (Exception ex) {
-            System.out.println("Error - Invalid Input\n");
-        }
-
-    }
-
     private static void findAndReserveARoom() {
         Scanner scanner = new Scanner(System.in);
 
-        Reservation reservation = new Reservation(null, null, null, null);
         try {
             // input Check-In-Date
             System.out.println("Enter Check-In Date mm/dd/yyyy example: 06/31/2022");
-            reservation.setCheckInDate(splitStringToDate(scanner.nextLine()));
+            Date checkInDate = splitStringToDate(scanner.nextLine());
 
             // input Check-Out-Date
             System.out.println("Enter Check-Out Date mm/dd/yyyy example: 06/31/2022");
-            reservation.setCheckOutDate(splitStringToDate(scanner.nextLine()));
+            Date checkOutDate = splitStringToDate(scanner.nextLine());
 
             // search and display free rooms
-            Collection<IRoom> freeRooms = HotelResource.findARoom(reservation.getCheckInDate(),
-                    reservation.getCheckOutDate());
+            Collection<IRoom> freeRooms = HotelResource.findARoom(checkInDate, checkOutDate);
             for (IRoom freeRoom : freeRooms) {
                 System.out.println(freeRoom);
             }
@@ -113,30 +88,31 @@ public class MainMenu {
                 }
 
                 System.out.println("Enter Email format: name@domain.com");
-                reservation.setCustomer(HotelResource.getCustomer(scanner.nextLine()));
+                String email = scanner.nextLine();
 
                 // Email-Address doesn't exist
-                if (reservation.getCustomer() == null) {
+                if (HotelResource.getCustomer(email) == null) {
                     throw new IllegalArgumentException();
                 }
 
                 System.out.println("What room would you like to reserve?");
                 String roomNumber = scanner.nextLine();
+                IRoom selectedRoom = null;
                 for (IRoom freeRoom : freeRooms) {
                     if (freeRoom.getRoomNumber().equals(roomNumber)) {
-                        reservation.setRoom(freeRoom);
+                        selectedRoom = freeRoom;
                     }
                 }
-                if (reservation.getRoom() == null) {
+                if (selectedRoom == null) {
                     throw new IllegalArgumentException();
                 }
 
-                System.out.println(reservation);
+                Reservation reservation = HotelResource.bookARoom(email,
+                        selectedRoom,
+                        checkInDate,
+                        checkOutDate);
 
-                HotelResource.bookARoom(reservation.getCustomer().getEmail(),
-                        reservation.getRoom(),
-                        reservation.getCheckInDate(),
-                        reservation.getCheckOutDate());
+                System.out.println(reservation);
             }
 
         } catch (Exception ex) {
@@ -153,6 +129,30 @@ public class MainMenu {
         calendar.set(year, month, day);
         return calendar.getTime();
     }
+
+    private static void createAccount() {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Input email-address
+            System.out.println("Enter Email format: name@domain.com");
+            String email = scanner.nextLine();
+
+            // Input first name
+            System.out.println("First Name");
+            String firstName = scanner.nextLine();
+
+            // Input last name
+            System.out.println("Last Name");
+            String lastName = scanner.nextLine();
+
+            HotelResource.createACustomer(email, firstName, lastName);
+        } catch (Exception ex) {
+            System.out.println("Error - Invalid Input\n");
+        }
+
+    }
+
 
     private static void seeMyReservation() {
         Scanner scanner = new Scanner(System.in);

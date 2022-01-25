@@ -3,8 +3,6 @@ import model.*;
 import java.util.*;
 
 public class AdminMenu {
-    public static HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
-
     public static void runMenu() {
         boolean keepRunning = true;
         Scanner scanner = new Scanner(System.in);
@@ -50,20 +48,21 @@ public class AdminMenu {
     private static void addARoom() {
         String screenText = "";
         String addRoom = "y";
-        int roomTypeSelection = 0;
-
+        HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
         Scanner scanner = new Scanner(System.in);
 
         while (addRoom.equals("y")) {
-            Room newRoom = new Room("", 0.0, RoomType.SINGLE);
+            String roomNumber = "";
+            int roomTypeSelection = 0;
+            double price = 0.0;
             try {
                 // Input room number
                 System.out.println("Enter a room number");
-                newRoom.setRoomNumber(scanner.nextLine());
+                roomNumber = scanner.nextLine();
 
                 // Input roomPrice per night
                 System.out.println("Enter roomPrice per night");
-                newRoom.setRoomPrice(Double.parseDouble(scanner.nextLine()));
+                price = Double.parseDouble(scanner.nextLine());
 
                 // Input room type
                 screenText = "Enter room type: 1 for single bed, 2 for double bed";
@@ -84,10 +83,12 @@ public class AdminMenu {
             } catch (Exception ex) {
                 System.out.println("Error - Invalid Input\n");
             }
+            RoomType roomType = RoomType.SINGLE;
             if (roomTypeSelection == 2) {
-                newRoom.setRoomType(RoomType.DOUBLE);
+                roomType = RoomType.DOUBLE;
             }
-            rooms.put(newRoom.getRoomNumber(), newRoom);
+            IRoom room = new Room(roomNumber, price, roomType);
+            rooms.put(roomNumber, room);
         }
         AdminResource.addRoom(rooms);
     }
