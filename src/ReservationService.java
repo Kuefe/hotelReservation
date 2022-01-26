@@ -10,6 +10,9 @@ public class ReservationService {
 
     private static ReservationService INSTANCE;
 
+    private ReservationService() {
+    }
+
     static ReservationService getInstance() {
         if (INSTANCE == null)
             INSTANCE = new ReservationService();
@@ -17,7 +20,7 @@ public class ReservationService {
         return INSTANCE;
     }
 
-    void addRoom(IRoom room) {
+    public void addRoom(IRoom room) {
         rooms.put(room.getRoomNumber(), room);
     }
 

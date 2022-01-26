@@ -19,29 +19,29 @@ public class Room implements IRoom {
     }
 
     @Override
-    public String getRoomNumber() {
+    public final String getRoomNumber() {
         return roomNumber;
     }
 
     @Override
-    public Double getRoomPrice() {
+    public final Double getRoomPrice() {
         return roomPrice;
     }
 
     @Override
-    public RoomType getRoomType() {
+    public final RoomType getRoomType() {
         return roomType;
     }
 
-    public void setRoomNumber(String roomNumber) {
+    public final void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
-    public void setRoomPrice(Double roomPrice) {
+    public final void setRoomPrice(Double roomPrice) {
         this.roomPrice = roomPrice;
     }
 
-    public void setRoomType(RoomType roomType) {
+    public final void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 
@@ -51,12 +51,12 @@ public class Room implements IRoom {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return Objects.hash(roomNumber);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         Room room = (Room) obj;
         if (room.roomNumber.equals(roomNumber)) {
             return true;

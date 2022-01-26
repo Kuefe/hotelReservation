@@ -1,6 +1,7 @@
 import model.IRoom;
 import model.Reservation;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainMenu {
@@ -62,59 +63,80 @@ public class MainMenu {
 
             // search and display free rooms
             Collection<IRoom> freeRooms = HotelResource.findARoom(checkInDate, checkOutDate);
-            for (IRoom freeRoom : freeRooms) {
-                System.out.println(freeRoom);
+
+            if (freeRooms.size() == 0) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(checkInDate);
+                calendar.add(Calendar.DAY_OF_MONTH, 7);
+                checkInDate = calendar.getTime();
+
+                calendar.setTime(checkOutDate);
+                calendar.add(Calendar.DAY_OF_MONTH, 7);
+                checkOutDate = calendar.getTime();
+
+                freeRooms = HotelResource.findARoom(checkInDate, checkOutDate);
             }
 
-            String screenText = "Would you like to book a room? y/n";
-            String bookRoom = "";
-            do {
-                System.out.println(screenText);
-                screenText = "Please enter Y(Yes) or N(No)";
-                bookRoom = scanner.nextLine().toLowerCase().substring(0, 1);
-            } while (!(bookRoom.equals("y") || bookRoom.equals("n")));
+            if (freeRooms.size() > 0) {
+                final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+                System.out.println("checkInDate: " + format.format(checkInDate) +
+                        " checkOutDate: " + format.format(checkOutDate));
 
-            if (bookRoom.equals("y")) {
-                screenText = "Do you have an account with us? y/n";
-                String accountExist = "";
+                for (IRoom freeRoom : freeRooms) {
+                    System.out.println(freeRoom);
+                }
+
+                String screenText = "Would you like to book a room? y/n";
+                String bookRoom = "";
                 do {
                     System.out.println(screenText);
                     screenText = "Please enter Y(Yes) or N(No)";
-                    accountExist = scanner.nextLine().toLowerCase().substring(0, 1);
-                } while (!(accountExist.equals("y") || accountExist.equals("n")));
+                    bookRoom = scanner.nextLine().toLowerCase().substring(0, 1);
+                } while (!(bookRoom.equals("y") || bookRoom.equals("n")));
 
-                if (accountExist.equals("n")) {
-                    createAccount();
-                }
+                if (bookRoom.equals("y")) {
+                    screenText = "Do you have an account with us? y/n";
+                    String accountExist = "";
+                    do {
+                        System.out.println(screenText);
+                        screenText = "Please enter Y(Yes) or N(No)";
+                        accountExist = scanner.nextLine().toLowerCase().substring(0, 1);
+                    } while (!(accountExist.equals("y") || accountExist.equals("n")));
 
-                System.out.println("Enter Email format: name@domain.com");
-                String email = scanner.nextLine();
-
-                // Email-Address doesn't exist
-                if (HotelResource.getCustomer(email) == null) {
-                    throw new IllegalArgumentException();
-                }
-
-                System.out.println("What room would you like to reserve?");
-                String roomNumber = scanner.nextLine();
-                IRoom selectedRoom = null;
-                for (IRoom freeRoom : freeRooms) {
-                    if (freeRoom.getRoomNumber().equals(roomNumber)) {
-                        selectedRoom = freeRoom;
+                    if (accountExist.equals("n")) {
+                        createAccount();
                     }
-                }
-                if (selectedRoom == null) {
-                    throw new IllegalArgumentException();
-                }
 
-                Reservation reservation = HotelResource.bookARoom(email,
-                        selectedRoom,
-                        checkInDate,
-                        checkOutDate);
+                    System.out.println("Enter Email format: name@domain.com");
+                    String email = scanner.nextLine();
 
-                System.out.println(reservation);
+                    // Email-Address doesn't exist
+                    if (HotelResource.getCustomer(email) == null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    System.out.println("What room would you like to reserve?");
+                    String roomNumber = scanner.nextLine();
+                    IRoom selectedRoom = null;
+                    for (IRoom freeRoom : freeRooms) {
+                        if (freeRoom.getRoomNumber().equals(roomNumber)) {
+                            selectedRoom = freeRoom;
+                        }
+                    }
+                    if (selectedRoom == null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    Reservation reservation = HotelResource.bookARoom(email,
+                            selectedRoom,
+                            checkInDate,
+                            checkOutDate);
+
+                    System.out.println(reservation);
+                }
+            } else {
+                System.out.println("Sorry! We are fully booked for this date");
             }
-
         } catch (Exception ex) {
             System.out.println("Error - Invalid Input\n");
         }
@@ -123,7 +145,8 @@ public class MainMenu {
     private static Date splitStringToDate(String inputDateString) {
         Calendar calendar = Calendar.getInstance();
         String[] checkInDateSplit = inputDateString.split("/");
-        int month = Integer.parseInt(checkInDateSplit[0]);
+        // month is 0 until 11 and the input is 1 until 12
+        int month = Integer.parseInt(checkInDateSplit[0]) - 1;
         int day = Integer.parseInt(checkInDateSplit[1]);
         int year = Integer.parseInt(checkInDateSplit[2]);
         calendar.set(year, month, day);

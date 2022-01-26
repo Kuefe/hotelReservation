@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Customer {
-    private String emailRegex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+    private final String emailRegex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private final Pattern pattern = Pattern.compile(emailRegex);
 
     private String firstName;
@@ -22,29 +22,29 @@ public class Customer {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "Firstname: " + firstName + " LastName: " + lastName + " Email: " + email;
     }
 
-    public String getFirstName() {
+    public final String getFirstName() {
         return firstName;
     }
 
-    public String getLastName() {
+    public final String getLastName() {
         return lastName;
     }
 
-    public String getEmail() {
+    public final String getEmail() {
         return email;
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return Objects.hash(email);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         Customer customer = (Customer) obj;
         if (customer.equals(email)) {
             return true;

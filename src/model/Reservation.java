@@ -17,8 +17,8 @@ public class Reservation {
     }
 
     @Override
-    public String toString() {
-        SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy");
+    public final String toString() {
+        final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         return "Reservation:\n" +
                 customer.getFirstName() + " " + customer.getLastName() + "\n" +
                 "roomNumber: " + room.getRoomNumber() + " " +
@@ -27,35 +27,35 @@ public class Reservation {
                 "checkOutDate: " + format.format(checkOutDate) + "\n";
     }
 
-    public Customer getCustomer() {
+    public final Customer getCustomer() {
         return customer;
     }
 
-    public IRoom getRoom() {
+    public final IRoom getRoom() {
         return room;
     }
 
-    public Date getCheckInDate() {
+    public final Date getCheckInDate() {
         return checkInDate;
     }
 
-    public Date getCheckOutDate() {
+    public final Date getCheckOutDate() {
         return checkOutDate;
     }
 
-    public void setCustomer(Customer customer) {
+    public final void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public void setRoom(IRoom room) {
+    public final void setRoom(IRoom room) {
         this.room = room;
     }
 
-    public void setCheckInDate(Date checkInDate) {
+    public final void setCheckInDate(Date checkInDate) {
         this.checkInDate = checkInDate;
     }
 
-    public void setCheckOutDate(Date checkOutDate) {
+    public final void setCheckOutDate(Date checkOutDate) {
         this.checkOutDate = checkOutDate;
     }
 }
